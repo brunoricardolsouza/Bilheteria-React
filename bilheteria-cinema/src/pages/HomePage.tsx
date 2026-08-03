@@ -1,26 +1,36 @@
+import { useMemo, useState } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { Link } from "react-router-dom";
 import { movies, genres, getFeaturedMovie } from "../data/movies";
 import MovieCard from "../components/movie/MovieCard";
-import { useMemo, useState, type FormEvent, type ChangeEvent } from "react";
+import { newSletterSchema, type NewSletterSchema } from "../Schemas/newsletter";
 
 const HomePage = () => {
   const featured = getFeaturedMovie();
   const [activeGenre, setActiveGenre] = useState("Todos");
   const popular = movies.slice(1, 4);
-  const [email, setEmail] = useState("");
   const [subscribed, setSubscribed] = useState(false);
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+    reset,
+  } = useForm<NewSletterSchema>({
+    resolver: zodResolver(newSletterSchema),
+  });
+
+  const onSubscribe = (data: NewSletterSchema) => {
+    console.log("Inscrito", data.email); //mock, ainda não é verdadeiramente o back-end
+    setSubscribed(true);
+    reset;
+  };
 
   const nowShowing = useMemo(() => {
     if (activeGenre === "Todos") return movies;
     return movies.filter((movie) => movie.genre.includes(activeGenre));
   }, [activeGenre]);
-
-  const handleSubscribe = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    if (!email.trim()) return;
-    setSubscribed(true);
-    setEmail("");
-  };
 
   if (!featured) {
     return (
@@ -159,26 +169,31 @@ const HomePage = () => {
           </div>
           <div className="flex flex-col gap-2 w-full lg:w-auto">
             <form
-              onSubmit={handleSubscribe}
-              className="flex gap-3 w-full lg:w-auto"
+              onSubmit={handleSubmit(onSubscribe)}
+              className="flex flex-col sm:flex-row gap-3 w-full lg:w-auto"
+              noValidate
             >
-              <input
-                type="email"
-                value={email}
-                onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                  setEmail(e.target.value)
-                }
-                placeholder="Enter your email"
-                className="flex-1 lg:w-72 bg-gray-800 border border-gray-700 rounded-md px-5 py-3 text-base focus:outline-none focus:border-red-500"
-              />
+              <div className="flex-1 lg:w-72">
+                <input
+                  type="email"
+                  {...register("email")}
+                  placeholder="Enter your e-mail"
+                  className="w-full bg-gray-800 border border-gray-700 rounded-md px-5 py-3 text-base focus:outline-none focus:border-red-500"
+                />
+                {errors.email && (
+                  <p className="text-red-400b text-xs mt-1">
+                    {errors.email.message}
+                  </p>
+                )}
+              </div>
               <button
                 type="submit"
-                className="bg-red-600 hover:bg-red-700 text-white text-base font-medium px-6 py-3 rounded-md transition-colors whitespace-nowrap"
+                disabled={isSubmitting}
+                className="bg-red-600 hover:bg-red-700 text-white text-base font-medium px-6 py-3 rounded-md transition-colors whitespace-nowrap disabled:opacity-50 "
               >
                 Join Now
               </button>
             </form>
-
             {subscribed && (
               <p className="text-green-400 text-sm">Inscrito com sucesso! 🎉</p>
             )}

@@ -78,7 +78,7 @@ export const snacks = [
   },
 ];
 
-export const snackCategories = [
+export const snackCategories: string[] = [
   "Todos",
   "Pipoca",
   "Combos",
