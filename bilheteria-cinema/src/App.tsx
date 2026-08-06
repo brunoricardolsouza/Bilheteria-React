@@ -6,21 +6,24 @@ import MoviePage from "./pages/MoviePage";
 import SnacksPage from "./pages/SnacksPage";
 import CheckoutPage from "./pages/CheckoutPage";
 import ConfirmationPage from "./pages/ConfirmationPage";
+import { BookingProvider } from "./contexts/BookingContext";
 
 function App() {
   return (
     <BrowserRouter>
-      <Navbar />
-      <main className="pt-16">
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/movie/:id" element={<MoviePage />} />
-          <Route path="/snacks" element={<SnacksPage />} />
-          <Route path="/checkout" element={<CheckoutPage />} />
-          <Route path="/confirmation" element={<ConfirmationPage />} />
-        </Routes>
-      </main>
-      <Footer />
+      <BookingProvider>
+        <Navbar />
+        <main className="pt-16">
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/movie/:id" element={<MoviePage />} />
+            <Route path="/snacks" element={<SnacksPage />} />
+            <Route path="/checkout" element={<CheckoutPage />} />
+            <Route path="/confirmation" element={<ConfirmationPage />} />
+          </Routes>
+        </main>
+        <Footer />
+      </BookingProvider>
     </BrowserRouter>
   );
 }

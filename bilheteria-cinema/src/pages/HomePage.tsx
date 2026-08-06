@@ -24,7 +24,7 @@ const HomePage = () => {
   const onSubscribe = (data: NewSletterSchema) => {
     console.log("Inscrito", data.email); //mock, ainda não é verdadeiramente o back-end
     setSubscribed(true);
-    reset;
+    reset();
   };
 
   const nowShowing = useMemo(() => {
@@ -181,7 +181,7 @@ const HomePage = () => {
                   className="w-full bg-gray-800 border border-gray-700 rounded-md px-5 py-3 text-base focus:outline-none focus:border-red-500"
                 />
                 {errors.email && (
-                  <p className="text-red-400b text-xs mt-1">
+                  <p className="text-red-400 text-xs mt-1">
                     {errors.email.message}
                   </p>
                 )}

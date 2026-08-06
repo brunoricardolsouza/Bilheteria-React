@@ -1,4 +1,14 @@
-export const snacks = [
+export interface Snack {
+  id: number;
+  name: string;
+  category: string;
+  price: number;
+  description: string;
+  badge: string | null;
+  image: string;
+}
+
+export const snacks: Snack[] = [
   {
     id: 1,
     name: "Pipoca Jumbo Cinema",
