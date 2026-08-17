@@ -23,7 +23,7 @@ const MovieCard = ({ movie }: MovieCardProps) => {
       </div>
       <h3 className="mt-2 text-sm font-semibold truncate">{movie.title}</h3>
       <p>
-        {movie.genre[0]} · {movie.rating.toFixed(1)}★
+        {movie.genre[0]} · {movie.rating.toFixed(1)} ★
       </p>
     </Link>
   );

@@ -31,7 +31,7 @@ const Navbar = () => {
               <Link
                 key={link.label}
                 to={link.to}
-                className="text-sm text-gray-300 hover:text-white transition-colors"
+                className="text-sm font-bold text-gray-300 hover:text-white transition-colors"
               >
                 {link.label}
               </Link>
@@ -68,7 +68,7 @@ const Navbar = () => {
           <div className="flex items-center gap-4">
             <Link
               to="/"
-              className="hidden sm:block text-sm text-gray-300 hover:text-white transition-colors ml-4"
+              className="hidden sm:block text-sm font-bold text-gray-300 hover:text-white transition-colors ml-4"
             >
               Sign In
             </Link>
