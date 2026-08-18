@@ -1,5 +1,6 @@
 import { useParams } from "react-router-dom";
-import { getMovieById, Session, ShowTime } from "../data/movies";
+import { getMovieById } from "../data/movies";
+import type { Session, ShowTime } from "../data/movies";
 import { useMemo, useState } from "react";
 import { useBooking } from "../contexts/BookingContext";
 import { useNavigate } from "react-router-dom";
@@ -20,6 +21,7 @@ const MoviePage = () => {
     const date = new Date(dateStr + "T00:00:00");
     const day = date.getDate();
     const month = date
+
       .toLocaleString("en-US", { month: "short" })
       .toUpperCase();
     const weekday = date
@@ -55,7 +57,7 @@ const MoviePage = () => {
     selectedSession && selectedShowTime && selectedSeats.length > 0;
 
   const handleConfirmBooking = () => {
-    if (!selectedSession || !selectedShowTime) return;
+    if (!movie || !selectedSession || !selectedShowTime) return;
     setMovieSelection(movie, selectedSession, selectedShowTime);
     navigate("/snacks");
   };
@@ -149,7 +151,7 @@ const MoviePage = () => {
               </svg>{" "}
               Available Time Slots
             </h3>
-            <div className="grid grid-cols-2 sm:grid-cols-8 flex gap-4">
+            <div className="flex flex-wrap gap-4">
               {selectedSession.times.map((showtime) => {
                 const isActive = selectedShowTime?.id === showtime.id;
 
@@ -233,7 +235,7 @@ const MoviePage = () => {
               viewBox="0 0 16 16"
             >
               <path
-                fill-rule="evenodd"
+                fillRule="evenodd"
                 d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8"
               />
             </svg>
