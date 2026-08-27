@@ -2,19 +2,32 @@ import type { Movie, Session, ShowTime } from "../data/movies";
 import type { Snack } from "../data/snacks";
 import { createContext, useState, type ReactNode, useContext } from "react";
 
+interface CustomerData {
+  name: string;
+  email: string;
+}
+
+export interface SelectedSeats {
+  seatId: string;
+  ticketType: "full" | "half";
+}
+
 interface BookingContextType {
   selectedMovie: Movie | null;
   selectedSession: Session | null;
   selectedShowTime: ShowTime | null;
-  selectedSeats: string[];
+  selectedSeats: SelectedSeats[];
   selectedSnacks: { snack: Snack; quantity: number }[];
+  customerData: CustomerData | null;
+  setCustomerData: (data: CustomerData) => void;
+  resetBooking: () => void;
 
   setMovieSelection: (
     movie: Movie,
     session: Session,
     showTime: ShowTime,
   ) => void;
-  toggleSeat: (seatId: string) => void;
+  toggleSeat: (seatId: string, ticketType: "full" | "half") => void;
   updateSnackQuantity: (snack: Snack, quantity: number) => void;
 }
 
@@ -26,10 +39,11 @@ export const BookingProvider = ({ children }: { children: ReactNode }) => {
   const [selectedShowTime, setSelectedShowTime] = useState<ShowTime | null>(
     null,
   );
-  const [selectedSeats, setSelectedSeats] = useState<string[]>([]);
+  const [selectedSeats, setSelectedSeats] = useState<SelectedSeats[]>([]);
   const [selectedSnacks, setSelectedSnacks] = useState<
     { snack: Snack; quantity: number }[]
   >([]);
+  const [customerData, setCustomerData] = useState<CustomerData | null>(null);
 
   const setMovieSelection = (
     movie: Movie,
@@ -39,15 +53,18 @@ export const BookingProvider = ({ children }: { children: ReactNode }) => {
     setSelectedMovie(movie);
     setSelectedSession(session);
     setSelectedShowTime(showTime);
-    setSelectedSeats([]);
   };
 
-  const toggleSeat = (seatId: string) => {
-    setSelectedSeats((prev) =>
-      prev.includes(seatId)
-        ? prev.filter((id) => id !== seatId)
-        : [...prev, seatId],
-    );
+  const toggleSeat = (seatId: string, ticketType: "full" | "half") => {
+    setSelectedSeats((prev) => {
+      const exists = prev.some((item) => item.seatId === seatId);
+
+      if (exists) {
+        return prev.filter((item) => item.seatId !== seatId);
+      }
+
+      return [...prev, { seatId, ticketType }];
+    });
   };
 
   const updateSnackQuantity = (snack: Snack, quantity: number) => {
@@ -67,6 +84,15 @@ export const BookingProvider = ({ children }: { children: ReactNode }) => {
     });
   };
 
+  const resetBooking = () => {
+    setSelectedMovie(null);
+    setSelectedSession(null);
+    setSelectedShowTime(null);
+    setSelectedSeats([]);
+    setSelectedSnacks([]);
+    setCustomerData(null);
+  };
+
   return (
     <BookingContext.Provider
       value={{
@@ -78,6 +104,9 @@ export const BookingProvider = ({ children }: { children: ReactNode }) => {
         setMovieSelection,
         toggleSeat,
         updateSnackQuantity,
+        customerData,
+        setCustomerData,
+        resetBooking,
       }}
     >
       {children}

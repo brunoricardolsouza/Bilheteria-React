@@ -4,6 +4,7 @@ import type { Session, ShowTime } from "../data/movies";
 import { useMemo, useState } from "react";
 import { useBooking } from "../contexts/BookingContext";
 import { useNavigate } from "react-router-dom";
+import { calculateTicketsTotal, formatSeatsList } from "../utils/ticket";
 
 const MoviePage = () => {
   const { id } = useParams<{ id: string }>();
@@ -16,6 +17,7 @@ const MoviePage = () => {
     null,
   );
   const { selectedSeats, toggleSeat, setMovieSelection } = useBooking();
+  const [pendingSeatId, setPendingSeatId] = useState<string | null>(null);
 
   const formatSessionDate = (dateStr: string) => {
     const date = new Date(dateStr + "T00:00:00");
@@ -50,7 +52,7 @@ const MoviePage = () => {
   const navigate = useNavigate();
 
   const totalPrice = selectedShowTime
-    ? selectedShowTime.price * selectedSeats.length
+    ? calculateTicketsTotal(selectedSeats, selectedShowTime.price)
     : 0;
 
   const canConfirm =
@@ -65,6 +67,23 @@ const MoviePage = () => {
   if (!movie) {
     return <p className="text-white px-6 py-12">Filme não encontrado!</p>;
   }
+
+  const handleSeatClick = (seatId: string) => {
+    const alredySelected = selectedSeats.some((seat) => seat.seatId === seatId);
+
+    if (alredySelected) {
+      toggleSeat(seatId, "full");
+      return;
+    }
+
+    setPendingSeatId(seatId);
+  };
+
+  const handleSelectTicketType = (ticketType: "full" | "half") => {
+    if (!pendingSeatId) return;
+    toggleSeat(pendingSeatId, ticketType);
+    setPendingSeatId(null);
+  };
 
   return (
     <div className="px-6 py-8 grid grid-cols-1 lg:grid-cols-[520px_1fr] gap-16">
@@ -186,18 +205,62 @@ const MoviePage = () => {
           >
             {allSeats.map((seatId) => {
               const isReserved = Reserved_Seats.includes(seatId);
-              const isSelected = selectedSeats.includes(seatId);
+              const selectedSeat = selectedSeats.find(
+                (seat) => seat.seatId === seatId,
+              );
+              const isPending = pendingSeatId === seatId;
 
+              let seatColor = "bg-gray-700 hover:bg-gray-600";
+
+              if (isReserved) {
+                seatColor = "bg-gray-800 cursor-not-allowed";
+              } else if (selectedSeat?.ticketType === "full") {
+                seatColor = "bg-red-600";
+              } else if (selectedSeat?.ticketType === "half") {
+                seatColor = "bg-blue-500";
+              } else if (isPending) {
+                seatColor = "bg-yellow-500 animate-pulse";
+              }
               return (
                 <button
                   key={seatId}
                   disabled={isReserved}
-                  onClick={() => toggleSeat(seatId)}
-                  className={`w-6 h-6 rounded ${isReserved ? "bg-gray-800 cursor-not-allowed" : isSelected ? "bg-red-600" : "bg-gray-700 hover:bg-gray-600"}`}
+                  onClick={() => handleSeatClick(seatId)}
+                  className={`w-6 h-6 rounded ${seatColor}`}
                 />
               );
             })}
           </div>
+          {pendingSeatId && (
+            <div className="bg-gray-800 rounded-md p-3 mb-4 flex items-center justify-between">
+              <p className="text-xs text-gray-300">
+                Assento{" "}
+                <span className="font-bold text-white">{pendingSeatId}</span> -
+                escolha o tipo:
+              </p>
+              <div className="flex gap-2">
+                <button
+                  onClick={() => handleSelectTicketType("full")}
+                  className="bg-red-600 hover:bg-red-700 text-white text-xs font-medium px-3 py-1.5 rounded-md transition-colors"
+                >
+                  Inteira
+                </button>
+                <button
+                  onClick={() => handleSelectTicketType("half")}
+                  className="bg-gray-700 hover:bg-gray-600 text-white text-xs font-medium px-3 py-1.5 rounded-md transition-colors"
+                >
+                  Meia
+                </button>
+                <button
+                  onClick={() => setPendingSeatId(null)}
+                  className="bg-gray-700 hover:bg-gray-600 text-white text-xs font-medium px-3 py-1.5 rounded-md transition-colors"
+                  aria-label="Cancelar"
+                >
+                  X
+                </button>
+              </div>
+            </div>
+          )}
           <div className="flex items-center justify-center gap-6 text-xs text-gray-400">
             <div className="flex items-center gap-1.5">
               <span className="w-3 h-3 rounded bg-gray-700 border border-gray-600" />
@@ -208,15 +271,24 @@ const MoviePage = () => {
               Reserved
             </div>
             <div className="flex items-center gap-1.5">
-              <span className="w-3 h-3 rounded bg-red-600" />
+              <span className="w-3 h-3 rounded bg-yellow-500" />
               Selected
+            </div>
+            <div className="flex items-center gap-1.5">
+              <span className="w-3 h-3 rounded bg-red-600" />
+              Full Price
+            </div>
+            <div className="flex items-center gap-1.5">
+              <span className="w-3 h-3 rounded bg-blue-500" />
+              Half Price
             </div>
           </div>
         </div>
         <div className="bg-gray-900 rounded-lg mb-6 p-4 flex items-center justify-between">
           <div>
             <p>
-              {selectedSeats.length} Seats Selected: {selectedSeats.join(", ")}
+              {selectedSeats.length} Seats Selected:{" "}
+              {formatSeatsList(selectedSeats)}
             </p>
             <p className="text-xl font-bold">R$ {totalPrice.toFixed(2)}</p>
           </div>

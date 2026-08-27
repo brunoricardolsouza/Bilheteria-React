@@ -122,6 +122,9 @@ const SnacksPage = () => {
                   <span>
                     {item.quantity}x {item.snack.name}
                   </span>
+                  <span>
+                    R$ {(item.snack.price * item.quantity).toFixed(2)}
+                  </span>
                 </div>
               ))}
             </div>
