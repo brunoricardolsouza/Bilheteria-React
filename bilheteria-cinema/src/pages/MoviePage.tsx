@@ -5,18 +5,20 @@ import { useMemo, useState } from "react";
 import { useBooking } from "../contexts/BookingContext";
 import { useNavigate } from "react-router-dom";
 import { calculateTicketsTotal, formatSeatsList } from "../utils/ticket";
+import { useLocalStorage } from "../hooks/useLocalStorage";
 
 const MoviePage = () => {
   const { id } = useParams<{ id: string }>();
   const movie = id ? getMovieById(id) : undefined;
 
-  const [selectedSession, setSelectedSession] = useState<Session | null>(
+  const [selectedSession, setSelectedSession] = useLocalStorage<Session | null>(
+    `movie_${id}_selectedSession`,
     movie ? movie.sessions[0] : null,
   );
-  const [selectedShowTime, setSelectedShowTime] = useState<ShowTime | null>(
-    null,
-  );
-  const { selectedSeats, toggleSeat, setMovieSelection } = useBooking();
+  const [selectedShowTime, setSelectedShowTime] =
+    useLocalStorage<ShowTime | null>(`movie_${id}_selectedShowTime`, null);
+  const { selectedSeats, toggleSeat, setMovieSelection, clearSeats } =
+    useBooking();
   const [pendingSeatId, setPendingSeatId] = useState<string | null>(null);
 
   const formatSessionDate = (dateStr: string) => {
@@ -139,6 +141,7 @@ const MoviePage = () => {
                   onClick={() => {
                     setSelectedSession(session);
                     setSelectedShowTime(null);
+                    clearSeats();
                   }}
                   className={`w-16 rounded-md py-1.5 text-center border transition-colors ${
                     isActive
@@ -177,7 +180,10 @@ const MoviePage = () => {
                 return (
                   <button
                     key={showtime.id}
-                    onClick={() => setSelectedShowTime(showtime)}
+                    onClick={() => {
+                      setSelectedShowTime(showtime);
+                      clearSeats();
+                    }}
                     className={`rounded-md py-2 text-center border transition-colors font-semibold ${
                       isActive
                         ? "bg-red-950 border-red-600 text-white"

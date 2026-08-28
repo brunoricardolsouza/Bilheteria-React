@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { useBooking } from "../contexts/BookingContext";
 import { useEffect } from "react";
 import { calculateTicketsTotal, formatSeatsList } from "../utils/ticket";
+import { clearLocalStorageByPrefix } from "../hooks/useLocalStorage";
 
 const ConfirmationPage = () => {
   const {
@@ -9,7 +10,6 @@ const ConfirmationPage = () => {
     selectedSession,
     selectedShowTime,
     selectedSeats,
-    selectedSnacks,
     resetBooking,
     customerData,
   } = useBooking();
@@ -47,6 +47,7 @@ const ConfirmationPage = () => {
     : "";
 
   const handleBackToHome = () => {
+    clearLocalStorageByPrefix("movie_");
     resetBooking();
     navigate("/");
   };

@@ -1,6 +1,7 @@
 import type { Movie, Session, ShowTime } from "../data/movies";
 import type { Snack } from "../data/snacks";
-import { createContext, useState, type ReactNode, useContext } from "react";
+import { createContext, type ReactNode, useContext } from "react";
+import { useLocalStorage } from "../hooks/useLocalStorage";
 
 interface CustomerData {
   name: string;
@@ -29,21 +30,33 @@ interface BookingContextType {
   ) => void;
   toggleSeat: (seatId: string, ticketType: "full" | "half") => void;
   updateSnackQuantity: (snack: Snack, quantity: number) => void;
+  clearSeats: () => void;
 }
 
 const BookingContext = createContext<BookingContextType | undefined>(undefined);
 
 export const BookingProvider = ({ children }: { children: ReactNode }) => {
-  const [selectedMovie, setSelectedMovie] = useState<Movie | null>(null);
-  const [selectedSession, setSelectedSession] = useState<Session | null>(null);
-  const [selectedShowTime, setSelectedShowTime] = useState<ShowTime | null>(
+  const [selectedMovie, setSelectedMovie] = useLocalStorage<Movie | null>(
+    "booking_selectedMovie",
     null,
   );
-  const [selectedSeats, setSelectedSeats] = useState<SelectedSeats[]>([]);
-  const [selectedSnacks, setSelectedSnacks] = useState<
+  const [selectedSession, setSelectedSession] = useLocalStorage<Session | null>(
+    "booking_selectedSession",
+    null,
+  );
+  const [selectedShowTime, setSelectedShowTime] =
+    useLocalStorage<ShowTime | null>("booking_selectedShowTime", null);
+  const [selectedSeats, setSelectedSeats] = useLocalStorage<SelectedSeats[]>(
+    "booking_selectedSeats",
+    [],
+  );
+  const [selectedSnacks, setSelectedSnacks] = useLocalStorage<
     { snack: Snack; quantity: number }[]
-  >([]);
-  const [customerData, setCustomerData] = useState<CustomerData | null>(null);
+  >("booking_selectedSnacks", []);
+  const [customerData, setCustomerData] = useLocalStorage<CustomerData | null>(
+    "booking_customerData",
+    null,
+  );
 
   const setMovieSelection = (
     movie: Movie,
@@ -93,6 +106,10 @@ export const BookingProvider = ({ children }: { children: ReactNode }) => {
     setCustomerData(null);
   };
 
+  const clearSeats = () => {
+    setSelectedSeats([]);
+  };
+
   return (
     <BookingContext.Provider
       value={{
@@ -107,6 +124,7 @@ export const BookingProvider = ({ children }: { children: ReactNode }) => {
         customerData,
         setCustomerData,
         resetBooking,
+        clearSeats,
       }}
     >
       {children}

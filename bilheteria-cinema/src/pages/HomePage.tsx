@@ -22,7 +22,7 @@ const HomePage = () => {
   });
 
   const onSubscribe = (data: NewSletterSchema) => {
-    console.log("Inscrito", data.email); //mock, ainda não é verdadeiramente o back-end
+    console.log("Inscrito", data.email);
     setSubscribed(true);
     reset();
   };
