@@ -40,8 +40,8 @@ export const movies: Movie[] = [
     classification: "16+",
     format: ["IMAX", "4K"],
     featured: true,
-    poster: "https://placehold.co/400x600",
-    backdrop: "https://placehold.co/1400x600",
+    poster: "https://placehold.co/400x600?text=Neon+Reckoning",
+    backdrop: "https://placehold.co/400x600?text=Neon+Reckoning",
     sessions: [
       {
         id: 101,
@@ -85,8 +85,8 @@ export const movies: Movie[] = [
     classification: "18+",
     format: ["IMAX", "4K"],
     featured: false,
-    poster: "https://placehold.co/400x600",
-    backdrop: "https://placehold.co/1400x600",
+    poster: "https://placehold.co/400x600?text=Aurora+Red",
+    backdrop: "https://placehold.co/400x600?text=Aurora+Red",
     sessions: [
       {
         id: 201,
@@ -120,8 +120,8 @@ export const movies: Movie[] = [
     classification: "14+",
     format: ["STANDARD"],
     featured: false,
-    poster: "https://placehold.co/400x600",
-    backdrop: "https://placehold.co/1400x600",
+    poster: "https://placehold.co/400x600?text=Crown+of+Shadows",
+    backdrop: "https://placehold.co/400x600?text=Crown+of+Shadows",
     sessions: [
       {
         id: 301,
@@ -146,8 +146,8 @@ export const movies: Movie[] = [
     classification: "14+",
     format: ["STANDARD", "4K"],
     featured: false,
-    poster: "https://placehold.co/400x600",
-    backdrop: "https://placehold.co/1400x600",
+    poster: "https://placehold.co/400x600?text=Binary+Protocol",
+    backdrop: "https://placehold.co/400x600?text=Binary+Protocol",
     sessions: [
       {
         id: 401,
@@ -172,8 +172,8 @@ export const movies: Movie[] = [
     classification: "12+",
     format: ["STANDARD"],
     featured: false,
-    poster: "https://placehold.co/400x600",
-    backdrop: "https://placehold.co/1400x600",
+    poster: "https://placehold.co/400x600?text=The+Last+Serenade",
+    backdrop: "https://placehold.co/400x600?text=The+Last+Serenade",
     sessions: [
       {
         id: 501,
@@ -197,8 +197,8 @@ export const movies: Movie[] = [
     classification: "18+",
     format: ["STANDARD"],
     featured: false,
-    poster: "https://placehold.co/400x600",
-    backdrop: "https://placehold.co/1400x600",
+    poster: "https://placehold.co/400x600?text=Blackwood+Manor",
+    backdrop: "https://placehold.co/400x600?text=Blackwood+Manor",
     sessions: [
       {
         id: 601,
