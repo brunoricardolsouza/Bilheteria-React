@@ -144,7 +144,6 @@ const SnacksPage = () => {
             </div>
           </div>
           <button
-            disabled={selectedSnacks.length === 0}
             onClick={() => navigate("/checkout")}
             className="w-full mt-4 bg-red-600 hover:bg-red-700 disabled:opacity-40 disabled:cursor-not-allowed text-white text-sm font-medium py-2.5 rounded-md transition-colors"
           >

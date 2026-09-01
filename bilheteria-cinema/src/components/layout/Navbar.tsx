@@ -1,6 +1,9 @@
 import { Link } from "react-router-dom";
-import { useState, type ChangeEvent } from "react";
+import { useState, type ChangeEvent, type FocusEvent } from "react";
 import Logo from "./Logo";
+import { useDebounce } from "../../hooks/useDebounce";
+import { useMemo } from "react";
+import { movies } from "../../data/movies";
 
 interface NavItem {
   label: string;
@@ -19,6 +22,22 @@ const Navbar = () => {
 
   const handleSearchChange = (e: ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value);
+  };
+
+  const debouncedSearchTerm = useDebounce(searchTerm, 300);
+
+  const searchResults = useMemo(() => {
+    const term = debouncedSearchTerm.toLowerCase();
+    if (!term) return [];
+    return movies
+      .filter((movie) => movie.title.toLowerCase().includes(term))
+      .slice(0, 5);
+  }, [debouncedSearchTerm]);
+
+  const handleSearchBlur = (e: FocusEvent<HTMLDivElement>) => {
+    if (!e.currentTarget.contains(e.relatedTarget)) {
+      setSearchOpen(false);
+    }
   };
 
   return (
@@ -40,15 +59,46 @@ const Navbar = () => {
         </div>
         <div className="flex items-center gap-4">
           {searchOpen ? (
-            <input
-              autoFocus
-              type="text"
-              value={searchTerm}
-              onChange={handleSearchChange}
-              onBlur={() => setSearchOpen(false)}
-              placeholder="Search movies..."
-              className="bg-gray-900 border border-gray-700 rounded-md px-3 py-1.5 text-sm w-40 sm:w-56 focus:outline-none focus:border-red-500"
-            />
+            <div className="relative" onBlur={handleSearchBlur}>
+              <input
+                autoFocus
+                type="text"
+                value={searchTerm}
+                onChange={handleSearchChange}
+                placeholder="Search movies..."
+                className="bg-gray-900 border border-gray-700 rounded-md px-3 py-1.5 text-sm w-40 sm:w-56 focus:outline-none focus:border-red-500"
+              />
+              {searchTerm.trim() !== "" && (
+                <div className="absolute top-full mt-2 right-0 w-64 bg-gray-900 border border-gray-800 rounded-md shadow-lg overflow-hidden z-50">
+                  {searchResults.length === 0 ? (
+                    <p className="text-gray-500 text-sm px-4 py-3">
+                      Nenhum filme encontrado.
+                    </p>
+                  ) : (
+                    searchResults.map((movie) => (
+                      <Link
+                        key={movie.id}
+                        to={`/movie/${movie.id}`}
+                        onClick={() => {
+                          setSearchOpen(false);
+                          setSearchTerm("");
+                        }}
+                        className="flex items-center gap-3 px-4 py-2 hover:bg-gray-800 transition-colors"
+                      >
+                        <img
+                          src={movie.poster}
+                          alt={movie.title}
+                          className="w-8 h-12 object-cover rounded"
+                        />
+                        <span className="text-sm text-gray-200">
+                          {movie.title}
+                        </span>
+                      </Link>
+                    ))
+                  )}
+                </div>
+              )}
+            </div>
           ) : (
             <button onClick={() => setSearchOpen(true)} aria-label="Search">
               <svg
