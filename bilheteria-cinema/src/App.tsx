@@ -7,6 +7,7 @@ import SnacksPage from "./pages/SnacksPage";
 import CheckoutPage from "./pages/CheckoutPage";
 import ConfirmationPage from "./pages/ConfirmationPage";
 import { BookingProvider } from "./contexts/BookingContext";
+import NotFoundPage from "./pages/NotFoundPage";
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
             <Route path="/snacks" element={<SnacksPage />} />
             <Route path="/checkout" element={<CheckoutPage />} />
             <Route path="/confirmation" element={<ConfirmationPage />} />
+            <Route path="*" element={<NotFoundPage />} />
           </Routes>
         </main>
         <Footer />
