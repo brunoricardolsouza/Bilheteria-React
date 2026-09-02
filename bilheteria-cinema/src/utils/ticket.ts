@@ -1,4 +1,4 @@
-import { SelectedSeats } from "../contexts/BookingContext";
+import type { SelectedSeats } from "../contexts/BookingContext";
 
 export const calculateSeatPrice = (
   ticketType: "full" | "half",

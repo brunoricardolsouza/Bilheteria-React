@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { useBooking } from "../contexts/BookingContext";
 import { useForm } from "react-hook-form";
-import { checkoutSchema, CheckoutSchema } from "../Schemas/checkout";
+import { checkoutSchema, type CheckoutSchema } from "../Schemas/checkout";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useState } from "react";
 import { promoCodeSchema, type PromoCodeSchema } from "../Schemas/promocode";
