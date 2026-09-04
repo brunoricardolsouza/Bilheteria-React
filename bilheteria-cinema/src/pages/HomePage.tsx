@@ -174,6 +174,9 @@ const HomePage = () => {
               noValidate
             >
               <div className="flex-1 lg:w-72">
+                <label htmlFor="newsletter-email" className="sr-only">
+                  Endereço de e-mail
+                </label>
                 <input
                   type="email"
                   {...register("email")}

@@ -88,6 +88,7 @@ const SnacksPage = () => {
                     <div className="flex items-center justify-between bg-gray-800 rounded-md px-3 py-2">
                       <button
                         onClick={() => updateSnackQuantity(snack, quantity - 1)}
+                        aria-label={`Diminuir quantidade de ${snack.name}`}
                         className="text-white font-bold w-5"
                       >
                         -
@@ -95,6 +96,7 @@ const SnacksPage = () => {
                       <span className="text-sm font-semibold">{quantity}</span>
                       <button
                         onClick={() => updateSnackQuantity(snack, quantity + 1)}
+                        aria-label={`Aumentar quantidade de ${snack.name}`}
                         className="text-white font-bold w-5"
                       >
                         +

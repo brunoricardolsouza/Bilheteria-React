@@ -164,6 +164,9 @@ const CheckoutPage = () => {
             <h3 className="font-semibold text-sm mb-3">Contact Information</h3>
             <div className="flex flex-col gap-3">
               <div>
+                <label htmlFor="checkout-name" className="sr-only">
+                  Endereço de e-mail
+                </label>
                 <input
                   type="text"
                   {...register("name")}
@@ -177,6 +180,9 @@ const CheckoutPage = () => {
                 )}
               </div>
               <div>
+                <label htmlFor="checkout-email" className="sr-only">
+                  Endereço de e-mail
+                </label>
                 <input
                   type="email"
                   {...register("email")}
@@ -195,6 +201,9 @@ const CheckoutPage = () => {
             <h3 className="font-semibold text-sm mb-3">Promo Code</h3>
             <div className="flex gap-2">
               <div className="flex-1">
+                <label htmlFor="promo-code" className="sr-only">
+                  Código promocional
+                </label>
                 <input
                   type="text"
                   {...registerPromo("code")}
@@ -225,6 +234,9 @@ const CheckoutPage = () => {
           </div>
           <div className="bg-gray-900 rounded-lg p-4">
             <h3 className="font-semibold text-sm mb-3">Payment Method</h3>
+            <label htmlFor="checkout-paymentmethod" className="sr-only">
+              Metodo de pagamento
+            </label>
             <div className="flex gap-3">
               {(
                 [
@@ -250,6 +262,9 @@ const CheckoutPage = () => {
             {paymentMethod === "card" && (
               <div className="flex flex-col gap-3 mt-4">
                 <div>
+                  <label htmlFor="card-number" className="sr-only">
+                    Numero do cartão
+                  </label>
                   <input
                     type="text"
                     {...register("cardNumber")}
@@ -264,6 +279,9 @@ const CheckoutPage = () => {
                 </div>
                 <div className="flex gap-3">
                   <div className="flex-1">
+                    <label htmlFor="card-expiry" className="sr-only">
+                      Validade do cartão (mês/ano)
+                    </label>
                     <input
                       type="text"
                       {...register("expiry")}
@@ -277,6 +295,9 @@ const CheckoutPage = () => {
                     )}
                   </div>
                   <div className="flex-1">
+                    <label htmlFor="card-cvv" className="sr-only">
+                      Código de segurança (CVV)
+                    </label>
                     <input
                       type="text"
                       {...register("cvv")}

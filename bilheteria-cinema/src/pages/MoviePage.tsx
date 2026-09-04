@@ -227,11 +227,24 @@ const MoviePage = () => {
               } else if (isPending) {
                 seatColor = "bg-yellow-500 animate-pulse";
               }
+
+              const seatStatusLabel = isReserved
+                ? "Reservado"
+                : selectedSeat?.ticketType === "full"
+                  ? "selecionado, inteira"
+                  : selectedSeat?.ticketType === "half"
+                    ? "selecionado, meia-entrada"
+                    : isPending
+                      ? "selecionado, pendente"
+                      : "disponível";
+
               return (
                 <button
                   key={seatId}
                   disabled={isReserved}
                   onClick={() => handleSeatClick(seatId)}
+                  arial-label={`Assento ${seatId}, ${seatStatusLabel}`}
+                  arial-pressed={!!selectedSeat}
                   className={`w-6 h-6 rounded ${seatColor}`}
                 />
               );
