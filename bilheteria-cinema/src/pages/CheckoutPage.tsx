@@ -165,9 +165,10 @@ const CheckoutPage = () => {
             <div className="flex flex-col gap-3">
               <div>
                 <label htmlFor="checkout-name" className="sr-only">
-                  Endereço de e-mail
+                  Nome
                 </label>
                 <input
+                  id="checkout-name"
                   type="text"
                   {...register("name")}
                   placeholder="Full Name"
@@ -184,6 +185,7 @@ const CheckoutPage = () => {
                   Endereço de e-mail
                 </label>
                 <input
+                  id="checkout-email"
                   type="email"
                   {...register("email")}
                   placeholder="Email"
@@ -205,6 +207,7 @@ const CheckoutPage = () => {
                   Código promocional
                 </label>
                 <input
+                  id="promo-code"
                   type="text"
                   {...registerPromo("code")}
                   placeholder="Enter your code..."
@@ -234,9 +237,6 @@ const CheckoutPage = () => {
           </div>
           <div className="bg-gray-900 rounded-lg p-4">
             <h3 className="font-semibold text-sm mb-3">Payment Method</h3>
-            <label htmlFor="checkout-paymentmethod" className="sr-only">
-              Metodo de pagamento
-            </label>
             <div className="flex gap-3">
               {(
                 [
@@ -266,6 +266,7 @@ const CheckoutPage = () => {
                     Numero do cartão
                   </label>
                   <input
+                    id="card-number"
                     type="text"
                     {...register("cardNumber")}
                     placeholder="Card Number"
@@ -283,6 +284,7 @@ const CheckoutPage = () => {
                       Validade do cartão (mês/ano)
                     </label>
                     <input
+                      id="card-expiry"
                       type="text"
                       {...register("expiry")}
                       placeholder="MM/YY"
@@ -299,6 +301,7 @@ const CheckoutPage = () => {
                       Código de segurança (CVV)
                     </label>
                     <input
+                      id="card-cvv"
                       type="text"
                       {...register("cvv")}
                       placeholder="CVV"

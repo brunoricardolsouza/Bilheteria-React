@@ -178,6 +178,7 @@ const HomePage = () => {
                   Endereço de e-mail
                 </label>
                 <input
+                  id="newsletter-email"
                   type="email"
                   {...register("email")}
                   placeholder="Enter your e-mail"
